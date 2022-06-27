@@ -1,11 +1,10 @@
-
+import auth from 'src/store/auth'
 const routes = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      // { path: '', component: () => import('pages/IndexPage.vue') },
-      { path: '/admin', component: () => import('pages/admin/Index'), meta: { requireLogin: true } }
+      { path: '/admin', component: () => import('pages/admin/Index'), }
     ]
   },
   {
@@ -16,7 +15,16 @@ const routes = [
   {
     name: 'profile',
     path: '/profile',
-    component: () => import('pages/profile.vue')
+    component: () => import('pages/profile.vue'), meta: { requireLogin: true },
+    beforEnter(to,from,next) {
+      if(!auth.getters[auth/isAuthenticated] ){
+        return next({
+          name: 'login'
+        })
+
+      }
+
+    }
   },
 
   {
