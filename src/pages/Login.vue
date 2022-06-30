@@ -56,11 +56,11 @@ export default {
 
           message: 'نام کاربری یا پسورد اشتباه است'
         })
-      } else if(!this.login.username && this.login.password) {
+      } else if(!this.login.phoneNumber && this.login.nationalCode) {
         this.addnewuser()}
 
     },
-    addnewuser:function(username,password) {
+    addnewuser:function(phoneNumber,nationalCode) {
      axios.post('alaatv.com/api/v2/definitions/UserUpdate'),
 	{
 		phoneNumber: 'phoneNumber',
@@ -70,7 +70,13 @@ export default {
 
   },
   submitLoginForm: function(){
+  axios.post('alaatv.com/api/v2/login'),
+	{
+		phoneNumber: this.phoneNumber,
+		nationalCode: this.nationalCode
+	}
     this.$router.push('/profile')
+    console.log(this.phoneNumber,this.nationalCode)
   },
   },
 
