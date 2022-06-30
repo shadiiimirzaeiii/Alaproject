@@ -1,165 +1,134 @@
- <template>
- <div class="q-pa-md">
-
-    <div class="q-gutter-md" style="max-width: 300px;margin-left: 500px;">
-
-
-
-
+<template>
+  <div class="q-pa-md">
+    <div class="q-gutter-md" style="max-width: 300px; margin-left: 500px;">
       <q-input rounded standout v-model="text" label="نام" />
-            <q-input rounded standout v-model="text" label=" نام خانوادگی" />
+      <q-input rounded standout v-model="text" label=" نام خانوادگی" />
 
+      <div class="q-pa-md">
+        <q-btn-dropdown color="primary" label="استان">
+          <q-list>
+            <q-item
+              clickable
+              v-close-popup
+              v-for="item in ostan"
+              :key="item.index"
+              value="{{item.id}}"
+              v-model="id"
+              >{{ item.title }}
+              <q-item-section>
+                <q-item-label></q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
+      </div>
 
+      <div class="q-pa-md">
+        <q-btn-dropdown color="primary" label="شهر">
+          <q-list>
+            <q-item
+              clickable
+              v-close-popup
+              v-for="city in shahr"
+              :key="city.index"
+              value="{{city.id}}"
+              >{{ city.name }}
+              <q-item-section>
+                <q-item-label></q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
+      </div>
 
-   <div class="q-pa-md">
-    <q-btn-dropdown color="primary" label="استان">
-      <q-list>
-        <q-item clickable v-close-popup @click="onItemClick">
-          <q-item-section>
-            <q-item-label v-for="item in province" :key="item.index">{{item.name}}</q-item-label>
-          </q-item-section>
-        </q-item>
-
-      </q-list>
-    </q-btn-dropdown>
-  </div>
-
-
-
-   <div class="q-pa-md">
-    <q-btn-dropdown color="primary" label="شهر">
-      <q-list>
-        <q-item clickable v-close-popup @click="onItemClick">
-          <q-item-section>
-            <q-item-label value="id"  v-for="shahr in getshahr" :key="shahr.index">{{gender.name}}</q-item-label>
-          </q-item-section>
-        </q-item>
-
-      </q-list>
-    </q-btn-dropdown>
-  </div>
-
-   <div class="q-pa-md">
-    <q-btn-dropdown color="primary" label="جنسیت">
-      <q-list>
-        <q-item clickable v-close-popup @click="onItemClick">
-          <q-item-section>
-            <q-item-label v-for="gender in getgender" :key="gender.index">{{gender.name}}</q-item-label>
-          </q-item-section>
-        </q-item>
-
-      </q-list>
-    </q-btn-dropdown>
-  </div>
-   <div class="q-pa-md">
-    <q-btn-dropdown color="primary" label="رشته">
-      <q-list>
-        <q-item clickable v-close-popup @click="onItemClick">
-          <q-item-section>
-            <q-item-label v-for="grade in getgrade" :key="grade.index">{{grade.name}}</q-item-label>
-          </q-item-section>
-        </q-item>
-
-      </q-list>
-    </q-btn-dropdown>
-  </div>
-
-
+      <div class="q-pa-md">
+        <q-btn-dropdown color="primary" label="جنسیت">
+          <q-list>
+            <q-item
+              clickable
+              v-close-popup
+              v-for="gender in jensiat"
+              :key="gender.index"
+              >{{ gender.name }}
+              <q-item-section>
+                <q-item-label></q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
+      </div>
+      <div class="q-pa-md">
+        <q-btn-dropdown color="primary" label="رشته">
+          <q-list>
+            <q-item
+              clickable
+              v-close-popup
+              v-for="grade in reshteh"
+              :key="grade.index"
+              >{{ grade.name }}
+              <q-item-section>
+                <q-item-label></q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
+      </div>
     </div>
-     </div>
-
+  </div>
 </template>
 
 <script>
+import axios from "axios";
 export default {
-  data(){
-    return{
-      province:"",
-      getgender:"",
-      getgrade:"",
-    }
+  data() {
+    return {
+      ostan: null,
+      city: null,
+      jensiat: null,
+      reshteh: null,
+    };
   },
-methods:{
-  getprovince:function(){
-            axios
-        .get(
-          "alaatv.com/api/v2/definitions/Province",
+  methods: {},
+  created() {
+    var axios = require("axios");
 
-        )
-        .then((response) => {
+    var province = {
+      method: "get",
+      url: "https://alaatv.com/api/v2/megaroute/getUserFormData",
+      headers: {},
+    };
 
-          console.log(response);
-          this.province= response.data;
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+    axios(province)
+      .then(function (response) {
+        var ostan = response.data.data["provinces"];
 
-    },
+        /*       ostan.forEach(myFunction);
+        function myFunction(item, index) {
+          console.log(item.title);
+        } */
 
-    getgender:function(){
-            axios
-        .get(
-          "alaatv.com/api/v2/ definitions/Gender",
+        var cities = response.data.data["cities"];
+        this.reshteh = response.data.data["major"];
+        this.jensiat = response.data.data["gender"];
 
-        )
-        .then((response) => {
+        var globalOne = 0;
+        var id = 15;
+        cities.filter(cityName);
 
-          console.log(response);
-          this.getgender= response.data;
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+        function cityName() {
+          var ostan = response.data.data["provinces"];
+          var cities = response.data.data["cities"];
+          if (response.data.data["cities"][globalOne]["province"]["id"] == id)
+            console.log(response.data.data["cities"][globalOne]["title"]);
+          globalOne++;
+        }
+      })
 
-    },    getgrade:function(){
-            axios
-        .get(
-          "alaatv.com/api/v2/definitions/Grade",
-
-        )
-        .then((response) => {
-
-          console.log(response);
-          this.getgrade= response.data;
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-
-    },
-
-
-
-getshahr : function(){
-      axios
-        .post(
-          "alaatv.com/api/v2/definitions/Shahr",
-
-          {
-            headers: {
-              "content-type": "application/json",
-              Accept: "application/json",
-            },id
-          }
-        )
-        .then((response) => {
-
-           this.shahr=response.data.value
-           console.log(response.data)
-
-
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-}
-}
-}
-
+      .catch(function (error) {
+        console.log(error);
+      });
+  },
+};
 </script>
 
-<style>
-
-</style>
+<style></style>
